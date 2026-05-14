@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growth Sweet Spot — L(E)arner Market Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1814;
+    --surface2: #242018;
+    --gold: #d4a843;
+    --gold-dim: #8a6d2a;
+    --gold-light: #f0cc7a;
+    --white: #f5f0e8;
+    --muted: #6b6558;
+    --red: #c44a3a;
+    --green: #3a8a5a;
+    --amber: #d4843a;
+    --border: rgba(212, 168, 67, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ========== LAYOUT ========== */
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ========== HEADER ========== */
+  .header {
+    padding: 48px 0 40px;
+    text-align: center;
+    position: relative;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,168,67,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .brand-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 24px;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 11vw, 96px);
+    line-height: 0.9;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .title span { color: var(--gold); display: block; }
+
+  .header-divider {
+    width: 48px;
+    height: 2px;
+    background: var(--gold);
+    margin: 24px auto;
+  }
+
+  .header-desc {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ========== FORM ========== */
+  .form-section {
+    margin-bottom: 8px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom: none;
+  }
+
+  .section-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .section-info {}
+
+  .section-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .section-desc {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 3px;
+  }
+
+  .field-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+  }
+
+  .field {
+    margin-bottom: 24px;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  .field-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .field-hint {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 10px;
+  }
+
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-prefix {
+    position: absolute;
+    left: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .input-suffix {
+    position: absolute;
+    right: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  input[type="number"], input[type="text"] {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid rgba(212,168,67,0.2);
+    color: var(--white);
+    padding: 14px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  input[type="number"]:focus, input[type="text"]:focus {
+    border-color: var(--gold);
+  }
+
+  .has-prefix input { padding-left: 36px; }
+  .has-suffix input { padding-right: 36px; }
+
+  /* Range input */
+  .range-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 3px;
+    background: var(--surface2);
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--gold);
+    cursor: pointer;
+    border-radius: 0;
+    transition: transform 0.1s ease;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  .range-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold);
+    min-width: 56px;
+    text-align: right;
+  }
+
+  /* Toggle */
+  .toggle-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .toggle-btn {
+    background: var(--bg);
+    border: 1px solid rgba(212,168,67,0.2);
+    color: var(--muted);
+    padding: 14px 16px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    text-align: left;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .toggle-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+  }
+
+  .toggle-btn:hover {
+    border-color: var(--gold);
+    color: var(--white);
+  }
+
+  .toggle-btn.active {
+    border-color: var(--gold);
+    background: rgba(212,168,67,0.08);
+    color: var(--white);
+  }
+
+  .toggle-btn.active::before { transform: scaleY(1); }
+
+  .toggle-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .toggle-btn.active .toggle-label { color: var(--gold); }
+
+  /* Formula display */
+  .formula-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .formula-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .formula-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--gold-light);
+  }
+
+  /* Calculate button */
+  .calc-btn {
+    width: 100%;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 22px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .calc-btn:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(212,168,67,0.3);
+  }
+
+  .calc-btn:active { transform: translateY(0); }
+
+  /* ========== RESULTS ========== */
+  .results-panel {
+    display: none;
+    margin-top: 8px;
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .results-panel.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .score-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 48px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .score-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(212,168,67,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .score-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 16px;
+  }
+
+  .score-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 18vw, 140px);
+    line-height: 0.9;
+    margin-bottom: 12px;
+    transition: color 0.3s ease;
+  }
+
+  .score-number.scale-ready { color: var(--green); }
+  .score-number.needs-improvement { color: var(--amber); }
+  .score-number.unscalable { color: var(--red); }
+
+  .score-tier {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .score-tier.scale-ready { color: var(--green); }
+  .score-tier.needs-improvement { color: var(--amber); }
+  .score-tier.unscalable { color: var(--red); }
+
+  .score-desc {
+    font-size: 14px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* Score bar */
+  .score-bar-wrap {
+    margin: 32px 0 0;
+    position: relative;
+  }
+
+  .score-bar-track {
+    height: 6px;
+    background: var(--surface2);
+    position: relative;
+    overflow: visible;
+  }
+
+  .score-bar-segments {
+    position: absolute;
+    inset: 0;
+    display: flex;
+  }
+
+  .seg-red { background: rgba(196,74,58,0.3); flex: 40; }
+  .seg-amber { background: rgba(212,132,58,0.3); flex: 20; }
+  .seg-green { background: rgba(58,138,90,0.3); flex: 40; }
+
+  .score-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .score-marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    background: var(--white);
+    border: 2px solid var(--bg);
+    transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .score-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .bar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* Breakdown */
+  .breakdown {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 24px;
+  }
+
+  .breakdown-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 20px;
+  }
+
+  .breakdown-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .breakdown-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .breakdown-item-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .breakdown-item-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .breakdown-item-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  .multiplier-note {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .multiplier-note strong { color: var(--white); font-style: normal; }
+
+  /* Interpretation */
+  .interpretation {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 24px;
+  }
+
+  .interp-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 16px;
+  }
+
+  .interp-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .interp-text strong { color: var(--gold-light); font-weight: 500; }
+
+  /* CTA */
+  .cta-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .cta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 12px;
+  }
+
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--white);
+    margin-bottom: 10px;
+    line-height: 1;
+  }
+
+  .cta-desc {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 24px;
+    line-height: 1.6;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 16px 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    margin-bottom: 12px;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold-dim);
+    padding: 12px 32px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 12px;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* Tiers reference */
+  .tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 32px;
+  }
+
+  .tier {
+    padding: 16px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .tier-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .tier-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .tier.red .tier-score { color: var(--red); }
+  .tier.red .tier-name { color: var(--red); }
+  .tier.amber .tier-score { color: var(--amber); }
+  .tier.amber .tier-name { color: var(--amber); }
+  .tier.green .tier-score { color: var(--green); }
+  .tier.green .tier-name { color: var(--green); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 40px 0 0;
+  }
+
+  .footer-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 480px) {
+    .breakdown-grid { grid-template-columns: 1fr; }
+    .tiers { grid-template-columns: 1fr; }
+    .toggle-group { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand-tag">L(E)arner Market Group — Trap Tax Audit Suite</div>
+    <div class="eyebrow">Scale Readiness Diagnostic</div>
+    <h1 class="title">Growth<span>Sweet Spot</span></h1>
+    <div class="header-divider"></div>
+    <p class="header-desc">Enter your numbers. Find out where you actually stand — not where you think you stand.</p>
+
+    <div class="tiers">
+      <div class="tier red">
+        <div class="tier-score">0–39</div>
+        <div class="tier-name">Unscalable</div>
+      </div>
+      <div class="tier amber">
+        <div class="tier-score">40–59</div>
+        <div class="tier-name">Needs Work</div>
+      </div>
+      <div class="tier green">
+        <div class="tier-score">60+</div>
+        <div class="tier-name">Scale Ready</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 1: Revenue Growth -->
+  <div class="form-section">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-info">
+        <div class="section-name">Revenue Growth</div>
+        <div class="section-desc">Your raw year-over-year growth rate — we'll normalize it</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field">
+        <div class="field-label">Revenue Growth Rate (YoY %)</div>
+        <div class="field-hint">Enter your actual percentage. 20% growth = enter 20. Negative growth is okay — enter it.</div>
+        <div class="input-wrap has-suffix">
+          <input type="number" id="rg" placeholder="0" min="-100" max="10000" oninput="updateAdjusted()">
+          <span class="input-suffix">%</span>
+        </div>
+        <div class="formula-box" id="adj-formula" style="display:none;">
+          <div class="formula-label">Adjusted Score</div>
+          <div class="formula-value" id="adj-value">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: eNPS -->
+  <div class="form-section">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-info">
+        <div class="section-name">Employee NPS (eNPS)</div>
+        <div class="section-desc">How likely your team is to recommend working here</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field">
+        <div class="field-label">eNPS Score <span style="color:var(--muted); font-size:10px; letter-spacing:0;">(-100 to 100)</span></div>
+        <div class="field-hint">eNPS = % Promoters minus % Detractors. Don't have it? Estimate: above 20 is decent, above 50 is strong, negative means you have a people problem.</div>
+        <div class="range-wrap">
+          <input type="range" id="enps" min="-100" max="100" value="0" oninput="updateENPS()">
+          <div class="range-value" id="enps-display">0</div>
+        </div>
+        <div class="formula-box" style="margin-top:12px;">
+          <div class="formula-label">Normalized (0–100)</div>
+          <div class="formula-value" id="enps-norm">50</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: CSAT -->
+  <div class="form-section">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-info">
+        <div class="section-name">Customer Satisfaction (CSAT)</div>
+        <div class="section-desc">How your customers rate their experience</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field">
+        <div class="field-label">CSAT Score <span style="color:var(--muted); font-size:10px; letter-spacing:0;">(0 to 100)</span></div>
+        <div class="field-hint">Usually expressed as a percentage of satisfied customers. 80+ is solid. Below 60 is a signal. Don't have it? Estimate based on reviews, returns, and repeat purchase rate.</div>
+        <div class="range-wrap">
+          <input type="range" id="csat" min="0" max="100" value="70" oninput="updateCSAT()">
+          <div class="range-value" id="csat-display">70</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Happiness Budget -->
+  <div class="form-section">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-info">
+        <div class="section-name">The Happiness Budget</div>
+        <div class="section-desc">The number that actually determines if this is sustainable</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field">
+        <div class="field-label">What do you personally need monthly to keep building this?</div>
+        <div class="field-hint">Not what you want. Not the goal. The floor. The number that, if the business doesn't hit it, you start making decisions from scarcity and stress instead of strategy.</div>
+        <div class="input-wrap has-prefix">
+          <span class="input-prefix">$</span>
+          <input type="number" id="happiness" placeholder="0" min="0" oninput="updateHappiness()">
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Is your monthly Free Cash Flow above that number?</div>
+        <div class="field-hint">Free cash flow = what's left after operating expenses. Not revenue. Not profit on paper. Actual cash in hand.</div>
+        <div class="toggle-group">
+          <button class="toggle-btn" id="fcf-yes" onclick="setFCF(true)">
+            <span class="toggle-label">Yes</span>
+            FCF exceeds my happiness budget
+          </button>
+          <button class="toggle-btn" id="fcf-no" onclick="setFCF(false)">
+            <span class="toggle-label">No</span>
+            FCF is below my happiness budget
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calculate -->
+  <button class="calc-btn" onclick="calculate()">CALCULATE MY GROWTH SWEET SPOT</button>
+
+  <!-- Results -->
+  <div class="results-panel" id="results">
+
+    <div class="score-hero">
+      <div class="score-eyebrow">Your Growth Sweet Spot Score</div>
+      <div class="score-number" id="score-number">—</div>
+      <div class="score-tier" id="score-tier">—</div>
+      <div class="score-desc" id="score-desc">—</div>
+      <div class="score-bar-wrap">
+        <div class="score-bar-track">
+          <div class="score-bar-segments">
+            <div class="seg-red"></div>
+            <div class="seg-amber"></div>
+            <div class="seg-green"></div>
+          </div>
+          <div class="score-bar-fill" id="bar-fill" style="width:0%"></div>
+          <div class="score-marker" id="bar-marker" style="left:0%"></div>
+        </div>
+        <div class="score-bar-labels">
+          <span class="bar-label">0 — Unscalable</span>
+          <span class="bar-label">40 — Needs Work</span>
+          <span class="bar-label">60 — Scale Ready</span>
+          <span class="bar-label">100+</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-title">Score Breakdown</div>
+      <div class="breakdown-grid">
+        <div class="breakdown-item">
+          <div class="breakdown-item-label">Adjusted Revenue Growth</div>
+          <div class="breakdown-item-value" id="b-rg">—</div>
+          <div class="breakdown-item-sub">Normalized from raw YoY %</div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-item-label">eNPS (Normalized)</div>
+          <div class="breakdown-item-value" id="b-enps">—</div>
+          <div class="breakdown-item-sub">Converted to 0–100 scale</div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-item-label">CSAT Score</div>
+          <div class="breakdown-item-value" id="b-csat">—</div>
+          <div class="breakdown-item-sub">Customer satisfaction</div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-item-label">Base Average</div>
+          <div class="breakdown-item-value" id="b-avg">—</div>
+          <div class="breakdown-item-sub">Average of three inputs</div>
+        </div>
+      </div>
+      <div class="multiplier-note" id="mult-note">—</div>
+      <div class="breakdown-grid" style="margin-bottom:0;">
+        <div class="breakdown-item" style="grid-column: span 2;">
+          <div class="breakdown-item-label">Final GSS Score</div>
+          <div class="breakdown-item-value" id="b-final" style="font-size:48px;">—</div>
+          <div class="breakdown-item-sub" id="b-final-sub">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="interpretation">
+      <div class="interp-title">What This Means For Your Business</div>
+      <div class="interp-text" id="interp-text">—</div>
+    </div>
+
+    <div class="cta-block">
+      <div class="cta-label">Next Step — Trap Tax Audit</div>
+      <div class="cta-title" id="cta-title">Find Out Why</div>
+      <div class="cta-desc" id="cta-desc">—</div>
+      <a href="ceo_blindspot_assessment.html" class="btn-primary">TAKE THE CEO BLINDSPOT ASSESSMENT</a>
+      <br style="margin-bottom:8px;">
+      <button class="btn-secondary" onclick="resetForm()">RECALCULATE</button>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">L(E)arner Market Group — Growth Sweet Spot v1.0</div>
+  </div>
+
+</div>
+
+<script>
+  let fcfAbove = null;
+
+  function updateAdjusted() {
+    const rg = parseFloat(document.getElementById('rg').value);
+    if (isNaN(rg)) {
+      document.getElementById('adj-formula').style.display = 'none';
+      return;
+    }
+    const adj = (rg / (rg + 100)) * 200;
+    document.getElementById('adj-value').textContent = adj.toFixed(1);
+    document.getElementById('adj-formula').style.display = 'flex';
+  }
+
+  function updateENPS() {
+    const val = parseInt(document.getElementById('enps').value);
+    document.getElementById('enps-display').textContent = val > 0 ? '+' + val : val;
+    const norm = ((val + 100) / 200) * 100;
+    document.getElementById('enps-norm').textContent = norm.toFixed(1);
+  }
+
+  function updateCSAT() {
+    const val = parseInt(document.getElementById('csat').value);
+    document.getElementById('csat-display').textContent = val;
+  }
+
+  function updateHappiness() {
+    // just triggers visual update if needed
+  }
+
+  function setFCF(above) {
+    fcfAbove = above;
+    document.getElementById('fcf-yes').classList.toggle('active', above === true);
+    document.getElementById('fcf-no').classList.toggle('active', above === false);
+  }
+
+  function calculate() {
+    const rgRaw = parseFloat(document.getElementById('rg').value);
+    const enps = parseInt(document.getElementById('enps').value);
+    const csat = parseInt(document.getElementById('csat').value);
+
+    // Validation
+    if (isNaN(rgRaw)) { alert('Please enter your revenue growth rate.'); return; }
+    if (fcfAbove === null) { alert('Please select whether your FCF exceeds your happiness budget.'); return; }
+
+    // Adjusted RG
+    const adjRG = (rgRaw / (rgRaw + 100)) * 200;
+
+    // Normalize eNPS to 0-100
+    const enpsNorm = ((enps + 100) / 200) * 100;
+
+    // Base average
+    const base = (adjRG + enpsNorm + csat) / 3;
+
+    // FCF multiplier
+    const multiplier = fcfAbove ? 1 : 0.5;
+
+    // Final score
+    const finalScore = base * multiplier;
+    const displayScore = Math.round(finalScore * 10) / 10;
+
+    // Tier
+    let tier, tierClass, desc, interpText, ctaTitle, ctaDesc;
+
+    if (finalScore >= 60) {
+      tier = 'Scale Ready';
+      tierClass = 'scale-ready';
+      desc = "Your fundamentals are solid. The question now isn't whether you can scale — it's whether your systems and team are ready to scale with you.";
+      interpText = `Your GSS score of <strong>${displayScore}</strong> puts you in Scale Ready territory. Revenue is growing, your team is reasonably aligned, customers are satisfied, and the business is sustaining you personally. <br><br>That's not nothing. Most founders never get here.<br><br>The risk at this stage isn't collapse — it's ceiling. You've outgrown the informal systems that got you here and if you don't build the infrastructure now, growth will start compressing instead of expanding. The decisions still routing through you are the first sign.`;
+      ctaTitle = "Now Diagnose the Ceiling";
+      ctaDesc = "A high GSS score means the business is ready. The question is whether the decision-making architecture is ready with it.";
+    } else if (finalScore >= 40) {
+      tier = 'Needs Improvement';
+      tierClass = 'needs-improvement';
+      desc = "There's real momentum here but something is leaking. The score says you're growing — the business just isn't keeping up with itself.";
+      interpText = `Your GSS score of <strong>${displayScore}</strong> says you're in motion but not in control. There's growth happening — but one or more of the core inputs is dragging the composite down and costing you compounding value every month you don't address it.<br><br>The most common culprit at this score range: <strong>the FCF multiplier</strong>. If you're growing fast but the business isn't sustaining you personally, every decision you make is colored by scarcity. That's not a strategy problem — it's a structural one.<br><br>The second most common: eNPS. People problems at this stage are expensive and quiet. By the time they're loud, you've already lost the people who mattered.`;
+      ctaTitle = "Find the Leak";
+      ctaDesc = "Something specific is holding this score down. The CEO Blindspot Assessment identifies which pattern is creating the drag.";
+    } else {
+      tier = 'Unscalable';
+      tierClass = 'unscalable';
+      desc = "This isn't a growth problem. It's a foundation problem. Scaling right now would make things worse, not better.";
+      interpText = `Your GSS score of <strong>${displayScore}</strong> is honest feedback the business isn't ready to hear — but needs to.<br><br>This doesn't mean the business is failing. It means the current foundation can't support the weight of what you're trying to build on top of it. Scaling an unscalable business doesn't fix the score — it accelerates the breakdown.<br><br><strong>The most important thing you can do right now</strong> is stop trying to grow and start trying to stabilize. Cash flow, team alignment, and customer experience all need attention before delegation infrastructure will hold.<br><br>The good news: unscalable businesses become scalable ones all the time. But it requires addressing the foundation, not the facade.`;
+      ctaTitle = "Fix the Foundation First";
+      ctaDesc = "Before systems and delegation, the fundamentals need to be in place. Start with understanding which pattern is creating the instability.";
+    }
+
+    // Render results
+    const scoreEl = document.getElementById('score-number');
+    scoreEl.textContent = displayScore;
+    scoreEl.className = 'score-number ' + tierClass;
+
+    const tierEl = document.getElementById('score-tier');
+    tierEl.textContent = tier;
+    tierEl.className = 'score-tier ' + tierClass;
+
+    document.getElementById('score-desc').textContent = desc;
+
+    // Bar
+    const pct = Math.min((finalScore / 120) * 100, 100);
+    document.getElementById('bar-fill').style.width = pct + '%';
+    document.getElementById('bar-fill').style.background = finalScore >= 85 ? 'var(--green)' : finalScore >= 65 ? 'var(--amber)' : 'var(--red)';
+    document.getElementById('bar-marker').style.left = pct + '%';
+
+    // Breakdown
+    document.getElementById('b-rg').textContent = adjRG.toFixed(1);
+    document.getElementById('b-enps').textContent = enpsNorm.toFixed(1);
+    document.getElementById('b-csat').textContent = csat;
+    document.getElementById('b-avg').textContent = base.toFixed(1);
+    document.getElementById('b-final').textContent = displayScore;
+    document.getElementById('b-final-sub').textContent = tier;
+
+    // Multiplier note
+    document.getElementById('mult-note').innerHTML = fcfAbove
+      ? `<strong>Full multiplier applied (1×)</strong> — Your FCF exceeds your happiness budget. The business is sustaining you, which means your decisions are coming from strategy, not survival.`
+      : `<strong>Half multiplier applied (0.5×)</strong> — Your FCF is below your happiness budget. This is the single biggest drag on your score. A business that isn't sustaining its founder is making every decision from scarcity — and it shows.`;
+
+    // Interpretation
+    document.getElementById('interp-text').innerHTML = interpText;
+
+    // CTA
+    document.getElementById('cta-title').textContent = ctaTitle;
+    document.getElementById('cta-desc').textContent = ctaDesc;
+
+    // Show results
+    const panel = document.getElementById('results');
+    panel.classList.add('visible');
+    setTimeout(() => {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+
+  function resetForm() {
+    document.getElementById('rg').value = '';
+    document.getElementById('enps').value = 0;
+    document.getElementById('csat').value = 70;
+    document.getElementById('enps-display').textContent = '0';
+    document.getElementById('csat-display').textContent = '70';
+    document.getElementById('enps-norm').textContent = '50';
+    document.getElementById('adj-formula').style.display = 'none';
+    fcfAbove = null;
+    document.getElementById('fcf-yes').classList.remove('active');
+    document.getElementById('fcf-no').classList.remove('active');
+    document.getElementById('happiness').value = '';
+    document.getElementById('results').classList.remove('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Init
+  updateENPS();
+  updateCSAT();
+</script>
+</body>
+</html>
