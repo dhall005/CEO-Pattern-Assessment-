@@ -1,1037 +1,999 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CEO Pattern Assessment — L(E)arner Market Group</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>The Trap Tax Audit — L(E)arner Market Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0e0c;
-    --surface: #1a1814;
-    --surface2: #242018;
-    --gold: #d4a843;
-    --gold-dim: #8a6d2a;
-    --gold-light: #f0cc7a;
-    --white: #f5f0e8;
-    --muted: #6b6558;
-    --red: #c44a3a;
-    --green: #3a8a5a;
-    --border: rgba(212, 168, 67, 0.15);
+    --bg: #0a0908;
+    --bg2: #111009;
+    --surface: #161410;
+    --surface2: #1e1b14;
+    --gold: #c9963a;
+    --gold-bright: #e8b84b;
+    --gold-dim: #7a5e22;
+    --gold-glow: rgba(201,150,58,0.12);
+    --white: #f2ece0;
+    --muted: #5c564a;
+    --muted2: #8a8070;
+    --red: #b84040;
+    --amber: #c47830;
+    --green: #3a7a54;
+    --border: rgba(201,150,58,0.12);
+    --border-bright: rgba(201,150,58,0.35);
   }
 
-- { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-background: var(–bg);
-color: var(–white);
-font-family: ‘DM Sans’, sans-serif;
-min-height: 100vh;
-overflow-x: hidden;
-}
-
-/* Noise overlay */
-body::before {
-content: ‘’;
-position: fixed;
-inset: 0;
-background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 200 200’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.85’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23n)’ opacity=‘0.03’/%3E%3C/svg%3E”);
-pointer-events: none;
-z-index: 999;
-}
-
-.screen { display: none; }
-.screen.active { display: flex; flex-direction: column; min-height: 100vh; }
-
-/* ========== INTRO SCREEN ========== */
-#intro {
-align-items: center;
-justify-content: center;
-padding: 40px 24px;
-text-align: center;
-position: relative;
-}
-
-.intro-bg {
-position: absolute;
-inset: 0;
-background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(212,168,67,0.06) 0%, transparent 70%);
-pointer-events: none;
-}
-
-.brand-tag {
-font-family: ‘DM Mono’, monospace;
-font-size: 10px;
-letter-spacing: 0.35em;
-text-transform: uppercase;
-color: var(–gold-dim);
-margin-bottom: 32px;
-}
-
-.intro-eyebrow {
-font-family: ‘DM Mono’, monospace;
-font-size: 11px;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-color: var(–gold);
-margin-bottom: 20px;
-}
-
-.intro-title {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: clamp(56px, 12vw, 110px);
-line-height: 0.9;
-letter-spacing: 0.02em;
-color: var(–white);
-margin-bottom: 8px;
-}
-
-.intro-title span {
-color: var(–gold);
-display: block;
-}
-
-.intro-subtitle {
-font-size: 15px;
-font-weight: 300;
-color: var(–muted);
-margin: 24px auto 0;
-max-width: 480px;
-line-height: 1.7;
-font-style: italic;
-}
-
-.intro-divider {
-width: 48px;
-height: 2px;
-background: var(–gold);
-margin: 32px auto;
-}
-
-.intro-description {
-max-width: 520px;
-margin: 0 auto 40px;
-font-size: 15px;
-line-height: 1.8;
-color: var(–white);
-font-weight: 300;
-}
-
-.intro-description strong {
-color: var(–gold-light);
-font-weight: 500;
-}
-
-.intro-meta {
-display: flex;
-justify-content: center;
-gap: 32px;
-margin-bottom: 40px;
-}
-
-.meta-item {
-text-align: center;
-}
-
-.meta-num {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 36px;
-color: var(–gold);
-line-height: 1;
-}
-
-.meta-label {
-font-family: ‘DM Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–muted);
-margin-top: 4px;
-}
-
-.btn-primary {
-background: var(–gold);
-color: var(–bg);
-border: none;
-padding: 18px 48px;
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 22px;
-letter-spacing: 0.1em;
-cursor: pointer;
-transition: all 0.2s ease;
-position: relative;
-overflow: hidden;
-}
-
-.btn-primary::after {
-content: ‘’;
-position: absolute;
-inset: 0;
-background: var(–white);
-opacity: 0;
-transition: opacity 0.2s ease;
-}
-
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(212,168,67,0.3); }
-.btn-primary:hover::after { opacity: 0.1; }
-.btn-primary:active { transform: translateY(0); }
-
-/* ========== QUESTION SCREEN ========== */
-#question {
-padding: 0;
-}
-
-.q-header {
-padding: 20px 24px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-border-bottom: 1px solid var(–border);
-}
-
-.q-brand {
-font-family: ‘DM Mono’, monospace;
-font-size: 10px;
-letter-spacing: 0.25em;
-color: var(–gold-dim);
-text-transform: uppercase;
-}
-
-.q-counter {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 20px;
-color: var(–muted);
-}
-
-.q-counter span { color: var(–gold); }
-
-/* Progress bar */
-.progress-bar {
-height: 3px;
-background: var(–surface2);
-position: relative;
-}
-
-.progress-fill {
-height: 100%;
-background: linear-gradient(90deg, var(–gold-dim), var(–gold));
-transition: width 0.4s ease;
-}
-
-/* Section label */
-.section-banner {
-background: var(–surface);
-border-bottom: 1px solid var(–border);
-padding: 12px 24px;
-display: flex;
-align-items: center;
-gap: 12px;
-}
-
-.section-num {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 28px;
-color: var(–gold);
-line-height: 1;
-}
-
-.section-info {}
-
-.section-name {
-font-family: ‘DM Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-color: var(–gold);
-}
-
-.section-desc {
-font-size: 12px;
-color: var(–muted);
-font-style: italic;
-margin-top: 2px;
-}
-
-/* Question body */
-.q-body {
-flex: 1;
-padding: 32px 24px;
-display: flex;
-flex-direction: column;
-max-width: 640px;
-margin: 0 auto;
-width: 100%;
-}
-
-.q-scenario-label {
-font-family: ‘DM Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-color: var(–muted);
-margin-bottom: 16px;
-}
-
-.q-text {
-font-size: clamp(17px, 3vw, 22px);
-font-weight: 400;
-line-height: 1.5;
-color: var(–white);
-margin-bottom: 40px;
-flex: 1;
-}
-
-.q-text em {
-color: var(–gold-light);
-font-style: italic;
-}
-
-.choices {
-display: flex;
-flex-direction: column;
-gap: 12px;
-}
-
-.choice-btn {
-background: var(–surface);
-border: 1px solid var(–border);
-padding: 20px 24px;
-text-align: left;
-cursor: pointer;
-transition: all 0.2s ease;
-position: relative;
-overflow: hidden;
-}
-
-.choice-btn::before {
-content: ‘’;
-position: absolute;
-left: 0;
-top: 0;
-bottom: 0;
-width: 3px;
-background: var(–gold);
-transform: scaleY(0);
-transition: transform 0.2s ease;
-}
-
-.choice-label {
-font-family: ‘DM Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–gold-dim);
-margin-bottom: 6px;
-}
-
-.choice-text {
-font-size: 14px;
-font-weight: 300;
-color: var(–white);
-line-height: 1.5;
-}
-
-.choice-btn:hover {
-border-color: var(–gold);
-background: var(–surface2);
-transform: translateX(4px);
-}
-
-.choice-btn:hover::before { transform: scaleY(1); }
-
-.choice-btn.selected {
-border-color: var(–gold);
-background: rgba(212, 168, 67, 0.08);
-}
-
-.choice-btn.selected::before { transform: scaleY(1); }
-
-.choice-btn.selected .choice-label { color: var(–gold); }
-
-/* ========== RESULTS SCREEN ========== */
-#results {
-padding: 0;
-align-items: stretch;
-}
-
-.results-hero {
-background: var(–surface);
-border-bottom: 1px solid var(–border);
-padding: 48px 24px 40px;
-text-align: center;
-position: relative;
-overflow: hidden;
-}
-
-.results-hero::before {
-content: ‘’;
-position: absolute;
-inset: 0;
-background: radial-gradient(ellipse 100% 100% at 50% 0%, rgba(212,168,67,0.08) 0%, transparent 70%);
-pointer-events: none;
-}
-
-.results-eyebrow {
-font-family: ‘DM Mono’, monospace;
-font-size: 10px;
-letter-spacing: 0.3em;
-text-transform: uppercase;
-color: var(–gold);
-margin-bottom: 16px;
-}
-
-.results-pattern-label {
-font-size: 13px;
-color: var(–muted);
-font-style: italic;
-margin-bottom: 8px;
-}
-
-.results-pattern-name {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: clamp(52px, 10vw, 88px);
-line-height: 0.9;
-color: var(–gold);
-margin-bottom: 16px;
-}
-
-.results-pattern-sub {
-font-size: 14px;
-color: var(–white);
-font-style: italic;
-font-weight: 300;
-max-width: 400px;
-margin: 0 auto 20px;
-line-height: 1.6;
-}
-
-.blend-badge {
-display: inline-block;
-background: rgba(212,168,67,0.12);
-border: 1px solid var(–border);
-padding: 6px 16px;
-font-family: ‘DM Mono’, monospace;
-font-size: 10px;
-letter-spacing: 0.15em;
-color: var(–gold-dim);
-text-transform: uppercase;
-}
-
-.results-body {
-padding: 32px 24px;
-max-width: 640px;
-margin: 0 auto;
-width: 100%;
-}
-
-.result-section {
-margin-bottom: 32px;
-padding-bottom: 32px;
-border-bottom: 1px solid var(–border);
-}
-
-.result-section:last-of-type { border-bottom: none; }
-
-.result-section-label {
-font-family: ‘DM Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-color: var(–gold-dim);
-margin-bottom: 16px;
-}
-
-.truth-box {
-background: var(–surface);
-border-left: 3px solid var(–gold);
-padding: 20px 24px;
-margin-bottom: 20px;
-}
-
-.truth-text {
-font-size: 15px;
-font-style: italic;
-line-height: 1.7;
-color: var(–white);
-font-weight: 300;
-}
-
-.pattern-detail {
-font-size: 14px;
-line-height: 1.8;
-color: var(–muted);
-font-weight: 300;
-}
-
-.pattern-detail strong {
-color: var(–white);
-font-weight: 500;
-}
-
-/* Trap tax map */
-.trap-map {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 8px;
-margin-top: 16px;
-}
-
-.trap-item {
-background: var(–surface);
-border: 1px solid var(–border);
-padding: 16px;
-}
-
-.trap-item.active {
-border-color: var(–gold);
-background: rgba(212,168,67,0.06);
-}
-
-.trap-item-label {
-font-family: ‘DM Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-color: var(–muted);
-margin-bottom: 4px;
-}
-
-.trap-item.active .trap-item-label { color: var(–gold); }
-
-.trap-item-name {
-font-size: 13px;
-font-weight: 500;
-color: var(–white);
-}
-
-.trap-item-cost {
-font-size: 11px;
-color: var(–muted);
-font-style: italic;
-margin-top: 4px;
-line-height: 1.4;
-}
-
-/* CTA section */
-.cta-section {
-background: var(–surface);
-border: 1px solid var(–border);
-padding: 32px 24px;
-text-align: center;
-margin: 32px 0;
-}
-
-.cta-label {
-font-family: ‘DM Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.3em;
-text-transform: uppercase;
-color: var(–gold-dim);
-margin-bottom: 12px;
-}
-
-.cta-title {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 36px;
-color: var(–white);
-margin-bottom: 12px;
-line-height: 1;
-}
-
-.cta-desc {
-font-size: 14px;
-color: var(–muted);
-font-style: italic;
-margin-bottom: 24px;
-line-height: 1.6;
-max-width: 400px;
-margin-left: auto;
-margin-right: auto;
-}
-
-.btn-secondary {
-background: transparent;
-border: 1px solid var(–gold);
-color: var(–gold);
-padding: 14px 36px;
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 18px;
-letter-spacing: 0.1em;
-cursor: pointer;
-transition: all 0.2s ease;
-margin-top: 8px;
-}
-
-.btn-secondary:hover {
-background: var(–gold);
-color: var(–bg);
-}
-
-.results-footer {
-text-align: center;
-padding: 24px;
-border-top: 1px solid var(–border);
-}
-
-.results-footer-brand {
-font-family: ‘DM Mono’, monospace;
-font-size: 10px;
-letter-spacing: 0.3em;
-color: var(–muted);
-text-transform: uppercase;
-}
-
-/* Animations */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-.fade-in { animation: fadeIn 0.4s ease forwards; }
-
-@media (max-width: 480px) {
-.intro-meta { gap: 20px; }
-.trap-map { grid-template-columns: 1fr; }
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Grain */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ===================== NAV ===================== */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10,9,8,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid var(--gold-dim);
+    padding: 8px 20px;
+    transition: all 0.2s ease;
+  }
+
+  .nav-cta:hover {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+  }
+
+  /* ===================== HERO ===================== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201,150,58,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,150,58,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 40% at 80% 60%, rgba(201,150,58,0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.1s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 14vw, 160px);
+    line-height: 0.88;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title .line1 { color: var(--white); display: block; }
+  .hero-title .line2 { color: var(--gold); display: block; }
+  .hero-title .line3 { color: var(--white); display: block; font-size: 0.55em; letter-spacing: 0.08em; }
+
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted2);
+    max-width: 580px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .btn-hero {
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 20px 56px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--white);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(201,150,58,0.35); }
+  .btn-hero:hover::before { opacity: 0.1; }
+
+  .hero-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.2s forwards;
+  }
+
+  .scroll-hint-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(180deg, var(--gold-dim), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+
+  /* ===================== SECTIONS ===================== */
+  section {
+    padding: 100px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 80px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 7vw, 72px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+    color: var(--white);
+  }
+
+  .section-title em { color: var(--gold); font-style: normal; }
+
+  .body-text {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--muted2);
+    margin-bottom: 20px;
+    max-width: 680px;
+  }
+
+  .body-text strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  /* ===================== PROBLEM SECTION ===================== */
+  .problem-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .pull-quote {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--white);
+    border-left: 3px solid var(--gold);
+    padding: 20px 32px;
+    margin: 40px 0;
+    background: var(--gold-glow);
+  }
+
+  /* ===================== TRAP TAX SECTION ===================== */
+  .trap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 40px 0;
+  }
+
+  .trap-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+  }
+
+  .trap-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .trap-card:hover { border-color: var(--border-bright); }
+  .trap-card:hover::before { transform: scaleX(1); }
+
+  .trap-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--border-bright);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .trap-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  .trap-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--muted2);
+    line-height: 1.7;
+  }
+
+  .trap-symptom {
+    margin-top: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ===================== WHY SECTION ===================== */
+  .why-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin: 0;
+    max-width: 100%;
+    padding: 100px 40px;
+  }
+
+  .why-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 48px;
+  }
+
+  .why-item {
+    display: flex;
+    gap: 20px;
+  }
+
+  .why-icon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--gold);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 40px;
+  }
+
+  .why-content {}
+
+  .why-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .why-text {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--muted2);
+    line-height: 1.7;
+  }
+
+  /* ===================== PROCESS SECTION ===================== */
+  .process-steps {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .process-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+  }
+
+  .process-step:hover { border-color: var(--border-bright); }
+
+  .step-num-col {
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    padding: 32px 0;
+  }
+
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .step-content {
+    padding: 28px 32px;
+  }
+
+  .step-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 8px;
+  }
+
+  .step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--white);
+    letter-spacing: 0.03em;
+    margin-bottom: 10px;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted2);
+    line-height: 1.75;
+  }
+
+  .step-desc strong { color: var(--white); font-weight: 500; }
+
+  .step-time {
+    margin-top: 14px;
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--gold-dim);
+    background: var(--bg);
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+
+  /* ===================== OUTCOMES SECTION ===================== */
+  .outcomes-list {
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .outcome-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px 24px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color 0.3s ease;
+  }
+
+  .outcome-item:hover { border-color: var(--border-bright); }
+
+  .outcome-check {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .outcome-check::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+  }
+
+  .outcome-text {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  .outcome-text em {
+    color: var(--muted2);
+    font-style: italic;
+    font-size: 13px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ===================== FOR WHO ===================== */
+  .for-who {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--bg2) 100%);
+    border: 1px solid var(--border);
+    padding: 48px;
+    margin: 48px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .for-who::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .for-who-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--gold);
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+
+  .for-who-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .for-who-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  .for-who-item::before {
+    content: '→';
+    color: var(--gold);
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    margin-top: 2px;
+  }
+
+  /* ===================== FINAL CTA ===================== */
+  .final-cta {
+    text-align: center;
+    padding: 100px 40px;
+    border-top: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,150,58,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .final-cta-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 24px;
+  }
+
+  .final-cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 9vw, 96px);
+    line-height: 0.9;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+
+  .final-cta-title span { color: var(--gold); display: block; }
+
+  .final-cta-sub {
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted2);
+    max-width: 440px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  .final-note {
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ===================== FOOTER ===================== */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .footer-link:hover { color: var(--gold); }
+
+  /* ===================== ANIMATIONS ===================== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width: 680px) {
+    nav { padding: 16px 20px; }
+    section { padding: 60px 20px; }
+    .trap-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .process-step { grid-template-columns: 60px 1fr; }
+    .for-who { padding: 32px 24px; }
+    .final-cta { padding: 60px 20px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .footer-links { justify-content: center; }
+  }
 </style>
-
 </head>
 <body>
 
-<!-- ========== INTRO SCREEN ========== -->
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">L(E)arner Market Group</div>
+  <a href="ceo_blindspot_assessment.html" class="nav-cta">Start the Audit →</a>
+</nav>
 
-<div id="intro" class="screen active">
-  <div class="intro-bg"></div>
-  <div class="brand-tag">L(E)arner Market Group</div>
-  <div class="intro-eyebrow">Free Assessment</div>
-  <h1 class="intro-title">CEO<span>Pattern</span></h1>
-  <p class="intro-subtitle">The pattern you can't see is the tax you keep paying.</p>
-  <div class="intro-divider"></div>
-  <p class="intro-description">
-    You didn't build a business to become its biggest obstacle. But somewhere between the first hire and the fifteenth, something shifted — and now <strong>every decision still routes through you.</strong><br><br>
-    This isn't a personality test. It's a mirror. 16 real scenarios. No right answers. Just the truth about <strong>which pattern is quietly running your business into a ceiling.</strong>
-  </p>
-  <div class="intro-meta">
-    <div class="meta-item">
-      <div class="meta-num">16</div>
-      <div class="meta-label">Scenarios</div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-eyebrow">L(E)arner Market Group — Free Diagnostic</div>
+  <h1 class="hero-title">
+    <span class="line1">The Trap</span>
+    <span class="line2">Tax</span>
+    <span class="line3">Audit</span>
+  </h1>
+  <p class="hero-sub">You built something real. Find out exactly what's stopping it from running without you.</p>
+  <div class="hero-cta-group">
+    <a href="ceo_blindspot_assessment.html" class="btn-hero">BEGIN THE AUDIT</a>
+    <span class="hero-note">Free · 3 Parts · Takes Under 10 Minutes</span>
+  </div>
+  <div class="scroll-hint">
+    <span class="scroll-hint-text">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- PROBLEM SECTION -->
+<section class="problem-section reveal">
+  <div class="section-eyebrow">The Problem</div>
+  <h2 class="section-title">You Built Something Real.<br>So Why Does It Still Feel Like<br><em>You're Running Everything?</em></h2>
+
+  <p class="body-text">Revenue is up. The team is bigger. By every external measure things are working.</p>
+  <p class="body-text">But inside the business something is off.</p>
+  <p class="body-text">Every decision still routes through you. Your calendar fills itself with meetings you didn't plan to be in. You start the day with a plan and end it having done none of it. Your team is capable — but somehow they can't move without you.</p>
+
+  <div class="pull-quote reveal reveal-delay-1">
+    "This isn't a motivation problem. It's not a hiring problem. It's not even a strategy problem. It's the CEO Trap."
+  </div>
+
+  <p class="body-text reveal reveal-delay-2">The CEO Trap is what happens when the founder becomes the operational bottleneck in their own business. It starts innocently. You built this thing. You know it better than anyone. It's faster to just handle it yourself.</p>
+  <p class="body-text reveal reveal-delay-2">So you stay involved. In everything. And the business grows around your involvement instead of beyond it.</p>
+  <p class="body-text reveal reveal-delay-3">Now you're not running a business. You're the central nervous system of one. Nothing moves without a signal from you. <strong>The team isn't incapable. They're waiting.</strong> Because somewhere along the way the business got wired to need you — and nobody ever rewired it.</p>
+</section>
+
+<!-- TRAP TAX SECTION -->
+<section class="reveal">
+  <div class="section-eyebrow">The Cost</div>
+  <h2 class="section-title">What Is the<br><em>Trap Tax?</em></h2>
+
+  <p class="body-text">The Trap Tax is what the CEO Trap costs you. It's not one big obvious expense. It's the slow, compounding drain of a business that can't function at full capacity because the founder is the ceiling.</p>
+
+  <div class="trap-grid">
+    <div class="trap-card reveal reveal-delay-1">
+      <div class="trap-num">01</div>
+      <div class="trap-name">The Time Trap</div>
+      <div class="trap-desc">Your calendar is the business. You're doing the work instead of building the system. Every hour in operations is an hour not building the next stage.</div>
+      <div class="trap-symptom">→ You end every day further behind than you started</div>
     </div>
-    <div class="meta-item">
-      <div class="meta-num">3</div>
-      <div class="meta-label">Minutes</div>
+    <div class="trap-card reveal reveal-delay-2">
+      <div class="trap-num">02</div>
+      <div class="trap-name">The Money Mirage</div>
+      <div class="trap-desc">Revenue looks healthy. But cash flow is stressed and the financial foundation isn't keeping pace with the growth on paper.</div>
+      <div class="trap-symptom">→ Strong topline, stressed bottom line</div>
     </div>
-    <div class="meta-item">
-      <div class="meta-num">4</div>
-      <div class="meta-label">Patterns</div>
+    <div class="trap-card reveal reveal-delay-2">
+      <div class="trap-num">03</div>
+      <div class="trap-name">The People Paradox</div>
+      <div class="trap-desc">You paid for help. You're still doing the work. Your best people leave first because they have options and low tolerance for environments where their judgment is constantly bypassed.</div>
+      <div class="trap-symptom">→ High performers out, average performers stay</div>
     </div>
-  </div>
-  <button class="btn-primary" onclick="startAssessment()">SHOW ME MY BLINDSPOT</button>
-</div>
-
-<!-- ========== QUESTION SCREEN ========== -->
-
-<div id="question" class="screen">
-  <div class="q-header">
-    <div class="q-brand">CEO Pattern Assessment</div>
-    <div class="q-counter"><span id="q-num">1</span>/16</div>
-  </div>
-  <div class="progress-bar">
-    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-  </div>
-  <div class="section-banner" id="section-banner">
-    <div class="section-num" id="section-num">01</div>
-    <div class="section-info">
-      <div class="section-name" id="section-name">The Time Trap</div>
-      <div class="section-desc" id="section-desc">How you relate to control and delegation</div>
+    <div class="trap-card reveal reveal-delay-3">
+      <div class="trap-num">04</div>
+      <div class="trap-name">The Marketing Sinkhole</div>
+      <div class="trap-desc">Spend is up but results are flat. The brand looks different across every location and every channel. The message isn't landing because no one owns it but you.</div>
+      <div class="trap-symptom">→ More spend, same results</div>
     </div>
   </div>
-  <div class="q-body">
-    <div class="q-scenario-label">The Scenario</div>
-    <div class="q-text" id="q-text"></div>
-    <div class="choices" id="choices"></div>
+
+  <p class="body-text reveal">Every one of these is a symptom of the same root cause — <strong>a founder whose presence is required for the business to function.</strong></p>
+</section>
+
+<!-- WHY SECTION -->
+<div class="why-section">
+  <div class="why-inner">
+    <div class="section-eyebrow reveal">Why Most Solutions Don't Work</div>
+    <h2 class="section-title reveal">The Advice Is Right.<br><em>It's Just Incomplete.</em></h2>
+
+    <p class="body-text reveal">Most advice for founders stuck in the CEO Trap sounds like this: delegate more, hire a COO, build SOPs, trust your team. That advice isn't wrong. It's just incomplete.</p>
+    <p class="body-text reveal">Because the CEO Trap isn't just an operational problem. <strong>It's a pattern.</strong> A behavioral signature that gets built into the business over time — and into the founder. You can install all the systems in the world and find yourself back in the middle of every decision six months later. Not because the systems failed. Because the pattern that created the trap was never identified.</p>
+
+    <div class="why-grid">
+      <div class="why-item reveal reveal-delay-1">
+        <div class="why-icon">01</div>
+        <div class="why-content">
+          <div class="why-title">It diagnoses the pattern, not just the symptoms</div>
+          <div class="why-text">Most tools tell you what's broken. The Trap Tax Audit tells you why — the specific founder behavioral pattern maintaining the trap from the inside.</div>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-2">
+        <div class="why-icon">02</div>
+        <div class="why-content">
+          <div class="why-title">It measures the human gap, not just the business metrics</div>
+          <div class="why-text">The Decision Gap Audit maps exactly where your team's perception of decisions diverges from yours — the precise location of your delegation breakdown.</div>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-2">
+        <div class="why-icon">03</div>
+        <div class="why-content">
+          <div class="why-title">It gives you a complete picture, not isolated data points</div>
+          <div class="why-text">Three diagnostics. One coherent story. Your business health, your founder pattern, and your delegation gap — together they reveal what no single assessment can.</div>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-3">
+        <div class="why-icon">04</div>
+        <div class="why-content">
+          <div class="why-title">It's built for operators, not academics</div>
+          <div class="why-text">No jargon. No theory. Real scenarios drawn from real founder behavior. The kind of honest mirror most consultants are afraid to hold up.</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ========== RESULTS SCREEN ========== -->
+<!-- PROCESS SECTION -->
+<section class="reveal">
+  <div class="section-eyebrow">The Process</div>
+  <h2 class="section-title">Three Parts.<br><em>One Complete Picture.</em></h2>
+  <p class="body-text">The Trap Tax Audit runs in sequence. Each part builds on the last. Together they show you exactly where the CEO Trap is operating and what's driving it.</p>
 
-<div id="results" class="screen">
-  <div class="results-hero">
-    <div class="results-eyebrow">Your CEO Pattern</div>
-    <div class="results-pattern-label">Your dominant pattern is</div>
-    <div class="results-pattern-name" id="result-name"></div>
-    <div class="results-pattern-sub" id="result-sub"></div>
-    <div class="blend-badge" id="blend-badge"></div>
+  <div class="process-steps">
+    <div class="process-step reveal reveal-delay-1">
+      <div class="step-num-col">
+        <div class="step-num">01</div>
+      </div>
+      <div class="step-content">
+        <div class="step-tag">CEO Pattern Assessment</div>
+        <div class="step-title">Find Your Blindspot</div>
+        <div class="step-desc">Sixteen real scenarios drawn from founder behavior. You pick the response that's most honest — not most aspirational. The result identifies <strong>which of five founder patterns is quietly running your business</strong> from the background and which of the four Trap Tax cost centers it's hitting hardest.</div>
+        <span class="step-time">≈ 3 minutes</span>
+      </div>
+    </div>
+
+    <div class="process-step reveal reveal-delay-2">
+      <div class="step-num-col">
+        <div class="step-num">02</div>
+      </div>
+      <div class="step-content">
+        <div class="step-tag">Growth Sweet Spot Score</div>
+        <div class="step-title">Score Your Business</div>
+        <div class="step-desc">Five inputs. One composite score. The Growth Sweet Spot combines your revenue growth, employee satisfaction, customer satisfaction, and whether the business is actually sustaining you personally. It tells you <strong>where your business stands right now</strong> — not where you think it stands.</div>
+        <span class="step-time">≈ 3 minutes</span>
+      </div>
+    </div>
+
+    <div class="process-step reveal reveal-delay-3">
+      <div class="step-num-col">
+        <div class="step-num">03</div>
+      </div>
+      <div class="step-content">
+        <div class="step-tag">Decision Gap Audit</div>
+        <div class="step-title">Map the Gap</div>
+        <div class="step-desc">You and your team separately assess the same decisions. The gap between your perceptions — measured and mapped — reveals <strong>exactly where your delegation is breaking down</strong> and which decisions are creating the most friction between you and the people you're paying to take things off your plate.</div>
+        <span class="step-time">≈ 5 minutes</span>
+      </div>
+    </div>
   </div>
-  <div class="results-body">
+</section>
 
-```
-<div class="result-section">
-  <div class="result-section-label">The hard truth</div>
-  <div class="truth-box">
-    <div class="truth-text" id="result-truth"></div>
+<!-- OUTCOMES SECTION -->
+<section class="reveal">
+  <div class="section-eyebrow">What You'll Walk Away With</div>
+  <h2 class="section-title">Not More Advice.<br><em>An Honest Mirror.</em></h2>
+  <p class="body-text">After completing all three parts of the Trap Tax Audit you will have:</p>
+
+  <div class="outcomes-list">
+    <div class="outcome-item reveal reveal-delay-1">
+      <div class="outcome-check"></div>
+      <div class="outcome-text">
+        A clear score that tells you how scalable your business actually is right now
+        <em>Not the number you want to see — the number that's actually there.</em>
+      </div>
+    </div>
+    <div class="outcome-item reveal reveal-delay-1">
+      <div class="outcome-check"></div>
+      <div class="outcome-text">
+        A specific founder pattern that explains the behavioral driver behind your CEO Trap
+        <em>Not a vague personality type — a precise operational signature with identifiable symptoms.</em>
+      </div>
+    </div>
+    <div class="outcome-item reveal reveal-delay-2">
+      <div class="outcome-check"></div>
+      <div class="outcome-text">
+        A map of where your team's decision-making perception diverges most from yours
+        <em>The exact location of your delegation breakdown — not a general area, a specific gap.</em>
+      </div>
+    </div>
+    <div class="outcome-item reveal reveal-delay-2">
+      <div class="outcome-check"></div>
+      <div class="outcome-text">
+        A complete picture of which of the four Trap Tax cost centers is hitting you hardest
+        <em>So you know where to focus first instead of trying to fix everything at once.</em>
+      </div>
+    </div>
+    <div class="outcome-item reveal reveal-delay-3">
+      <div class="outcome-check"></div>
+      <div class="outcome-text">
+        Clarity
+        <em>An honest mirror that shows you exactly what is happening and why — before you spend another dollar trying to fix it.</em>
+      </div>
+    </div>
   </div>
-  <div class="pattern-detail" id="result-detail"></div>
-</div>
+</section>
 
-<div class="result-section">
-  <div class="result-section-label">Your Trap Tax breakdown</div>
-  <p style="font-size:13px; color: var(--muted); font-style:italic; margin-bottom:16px; line-height:1.6;">Based on your pattern, here's where you're paying the most. The highlighted ones are your primary cost centers.</p>
-  <div class="trap-map" id="trap-map"></div>
-</div>
+<!-- FOR WHO -->
+<section class="reveal">
+  <div class="section-eyebrow">Who This Is For</div>
+  <h2 class="section-title">Built for<br><em>Operators, Not Theorists.</em></h2>
 
-<div class="result-section">
-  <div class="result-section-label">What actually fixes this</div>
-  <div class="pattern-detail" id="result-fix"></div>
-</div>
-
-<div class="cta-section">
-  <div class="cta-label">Ready to stop paying the CEO Trap Tax?</div>
-  <div class="cta-title">Find Your Growth Sweet Spot Score Next</div>
-  <div class="cta-desc">The CEO Pattern Assessment is just the first layer. The Growth Sweet Spot tells your exactly how scalable and fundable your business is right now</div>
-  <button class="btn-primary" onclick="window.open('https://https://dhall005.github.io/CEO-Pattern-Assessment-/GSS.html','_blank')">GET THE GSS Score</button>
-  <br>
-  <button class="btn-secondary" onclick="resetAssessment()">RETAKE ASSESSMENT</button>
-</div>
-```
-
+  <div class="for-who reveal">
+    <div class="for-who-title">This Was Built For You If —</div>
+    <div class="for-who-list">
+      <div class="for-who-item">Your business is growing but still requires you personally to function at full capacity.</div>
+      <div class="for-who-item">You've tried delegation before and found yourself back in the middle of everything months later.</div>
+      <div class="for-who-item">Growth feels harder than it should given how far you've already come.</div>
+      <div class="for-who-item">You're a founder or CEO of an independent retail operation — including multi-location cannabis dispensary operators — past survival stage but not yet past yourself.</div>
+      <div class="for-who-item">You want an honest diagnostic, not a motivational framework.</div>
+    </div>
   </div>
-  <div class="results-footer">
-    <div class="results-footer-brand">L(E)arner Market Group — Trap Tax Audit Suite</div>
-  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div class="final-cta reveal">
+  <div class="final-cta-eyebrow">Ready? Start with Step One</div>
+  <h2 class="final-cta-title">
+    Find Your
+    <span>Blindspot.</span>
+  </h2>
+  <p class="final-cta-sub">The CEO Pattern Assessment is where the audit begins. Sixteen scenarios. The most direct question the audit asks — which pattern is running your business without your permission?</p>
+  <a href="ceo_blindspot_assessment.html" class="btn-hero">START THE CEO PATTERN ASSESSMENT</a>
+  <div class="final-note">Free · No signup required · Takes 3 minutes</div>
 </div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">L(E)arner Market Group — Trap Tax Audit Suite</div>
+  <div class="footer-links">
+    <a href="ceo_blindspot_assessment.html" class="footer-link">CEO Pattern Assessment</a>
+    <a href="growth_sweet_spot.html" class="footer-link">Growth Sweet Spot</a>
+  </div>
+</footer>
 
 <script>
-const questions = [
-  // ===== SECTION 1: TIME TRAP (Indispensable) =====
-  {
-    section: 1,
-    sectionName: "The Time Trap",
-    sectionDesc: "How you relate to control and delegation",
-    text: "Your ops manager sends a decision up to you that they've handled 20 times before. You:",
-    choices: [
-      { text: "Answer it because honestly it's faster and you already know what you want anyway.", pattern: "I" },
-      { text: "Send it back with a question — if they can't think it through, that's a training problem.", pattern: "L" }
-    ]
-  },
-  {
-    section: 1,
-    sectionName: "The Time Trap",
-    sectionDesc: "How you relate to control and delegation",
-    text: "Someone asks if you could take a two-week vacation and let the team run things. Your honest gut reaction is:",
-    choices: [
-      { text: "Mild panic. Not because you don't trust them, but because you're not sure there's a 'them' without you.", pattern: "I" },
-      { text: "Skepticism. You'd come back to a mess and spend a month fixing what three people broke.", pattern: "L" }
-    ]
-  },
-  {
-    section: 1,
-    sectionName: "The Time Trap",
-    sectionDesc: "How you relate to control and delegation",
-    text: "Your calendar is back-to-back again. A team member asks to take something off your plate. You:",
-    choices: [
-      { text: "Say yes but then cc yourself on everything because you want to stay in the loop.", pattern: "I" },
-      { text: "Say yes but spend the next week redoing 40% of it because they didn't do it your way.", pattern: "P" }
-    ]
-  },
-  {
-    section: 1,
-    sectionName: "The Time Trap",
-    sectionDesc: "How you relate to control and delegation",
-    text: "A staff meeting runs long because the team needs your input on something operational. You feel:",
-    choices: [
-      { text: "Needed — honestly this is what you're here for and you're good at it.", pattern: "I" },
-      { text: "Frustrated — this should have been an email and none of these should need your sign-off.", pattern: "O" }
-    ]
-  },
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-  // ===== SECTION 2: MONEY MIRAGE (Overprover) =====
-  {
-    section: 2,
-    sectionName: "The Money Mirage",
-    sectionDesc: "How you relate to growth and financial decisions",
-    text: "Revenue is up 40% but your take-home feels the same. Someone suggests slowing down to fix the financial foundation. You:",
-    choices: [
-      { text: "Push back. Momentum is everything. You'll fix the foundation at the next level.", pattern: "O" },
-      { text: "Agree in the meeting and then keep chasing the next number anyway.", pattern: "O" }
-    ]
-  },
-  {
-    section: 2,
-    sectionName: "The Money Mirage",
-    sectionDesc: "How you relate to growth and financial decisions",
-    text: "Someone asks you why you're working this hard. Your honest answer (not the one you say out loud) is:",
-    choices: [
-      { text: "Because stopping feels like failing. The number has to keep going up.", pattern: "O" },
-      { text: "Because if you slow down you might realize you don't actually know what you're building toward.", pattern: "P" }
-    ]
-  },
-  {
-    section: 2,
-    sectionName: "The Money Mirage",
-    sectionDesc: "How you relate to growth and financial decisions",
-    text: "A financial advisor tells you the business looks great on paper but your cash position is stressed. You:",
-    choices: [
-      { text: "Nod and then explain why the next quarter is going to change everything.", pattern: "O" },
-      { text: "Ask for a new report. This one must be missing something because the revenue doesn't lie.", pattern: "P" }
-    ]
-  },
-  {
-    section: 2,
-    sectionName: "The Money Mirage",
-    sectionDesc: "How you relate to growth and financial decisions",
-    text: "You get the opportunity to take on a big new client that would strain your current team. You:",
-    choices: [
-      { text: "Take it. You'll figure out the people problem. You always have.", pattern: "O" },
-      { text: "Take it but immediately start micromanaging the delivery because you can't afford for this one to go wrong.", pattern: "P" }
-    ]
-  },
-
-  // ===== SECTION 3: PEOPLE PARADOX (Lone Wolf / Pleaser) =====
-  {
-    section: 3,
-    sectionName: "The People Paradox",
-    sectionDesc: "How you relate to your team",
-    text: "A key employee comes to you with a problem between them and another team member. You:",
-    choices: [
-      { text: "Handle it yourself because by the time you explain the context it's faster to just deal with it.", pattern: "L" },
-      { text: "Smooth it over and avoid picking a side even though you know who's actually wrong.", pattern: "PL" }
-    ]
-  },
-  {
-    section: 3,
-    sectionName: "The People Paradox",
-    sectionDesc: "How you relate to your team",
-    text: "You need to give critical feedback to a strong performer who's been slipping. You:",
-    choices: [
-      { text: "Have the conversation but soften it so much they leave thinking everything is fine.", pattern: "PL" },
-      { text: "Handle it more bluntly than intended and then wonder why they seem distant afterward.", pattern: "L" }
-    ]
-  },
-  {
-    section: 3,
-    sectionName: "The People Paradox",
-    sectionDesc: "How you relate to your team",
-    text: "A new manager you hired is doing things differently than you would. The results are okay but not great. You:",
-    choices: [
-      { text: "Start hovering. Okay isn't good enough and you built this thing for a reason.", pattern: "L" },
-      { text: "Don't say anything yet. You don't want to undermine them so early even though something feels off.", pattern: "PL" }
-    ]
-  },
-  {
-    section: 3,
-    sectionName: "The People Paradox",
-    sectionDesc: "How you relate to your team",
-    text: "Your team comes to you constantly with questions that feel below your pay grade. Your real feeling is:",
-    choices: [
-      { text: "Low-key that nobody else can think at your level — which is fine, that's why you're the CEO.", pattern: "L" },
-      { text: "That you probably created this dynamic by being too available and too agreeable.", pattern: "PL" }
-    ]
-  },
-
-  // ===== SECTION 4: MARKETING SINKHOLE (Perfectionist) =====
-  {
-    section: 4,
-    sectionName: "The Marketing Sinkhole",
-    sectionDesc: "How you relate to brand, messaging and external execution",
-    text: "Your team puts together a marketing campaign. It's solid — not exactly how you'd do it but solid. You:",
-    choices: [
-      { text: "Approve it but tweak 15 things before it goes out because the details matter.", pattern: "P" },
-      { text: "Scrap it and do it yourself because the brand has a standard and this isn't it.", pattern: "P" }
-    ]
-  },
-  {
-    section: 4,
-    sectionName: "The Marketing Sinkhole",
-    sectionDesc: "How you relate to brand, messaging and external execution",
-    text: "You've been meaning to launch a new marketing initiative for three months. It's still not live because:",
-    choices: [
-      { text: "It's not ready. You have a specific vision for it and it needs to be right before it goes public.", pattern: "P" },
-      { text: "You keep changing your mind about the direction and can't commit to a version.", pattern: "O" }
-    ]
-  },
-  {
-    section: 4,
-    sectionName: "The Marketing Sinkhole",
-    sectionDesc: "How you relate to brand, messaging and external execution",
-    text: "Someone on your team suggests a new way to position the brand that actually makes sense. Your reaction:",
-    choices: [
-      { text: "Resistance. You've built this brand from zero and you know its voice better than anyone.", pattern: "L" },
-      { text: "Interest — then you slowly reshape it into your original vision during execution anyway.", pattern: "P" }
-    ]
-  },
-  {
-    section: 4,
-    sectionName: "The Marketing Sinkhole",
-    sectionDesc: "How you relate to brand, messaging and external execution",
-    text: "Marketing spend is up. Results are flat. A consultant says the messaging isn't landing with the right audience. You:",
-    choices: [
-      { text: "Disagree — the market just hasn't caught up to what you're building yet.", pattern: "O" },
-      { text: "Know they're probably right but the thought of rebuilding the messaging from scratch is exhausting.", pattern: "PL" }
-    ]
-  }
-];
-
-const patterns = {
-  I: {
-    name: "The Indispensable",
-    sub: "You didn't create a team. You created an audience.",
-    truth: "Your need to be needed isn't laziness or bad management. It's a feature you built into the business because somewhere along the way being essential became part of your identity. The problem is — you can't scale a business that can't breathe without you.",
-    detail: "<strong>What this looks like in real life:</strong> Your team asks permission for things they should own. You answer because it's faster. Decisions pile up on your desk not because your team is incompetent but because you've never made it safe for them to be wrong without you. You're not the bottleneck. You're the safety net they never had to outgrow.",
-    primaryTraps: ["Time Trap", "People Paradox"],
-    fix: "<strong>The fix isn't delegation — it's extraction.</strong> The decisions stuck in your head need to become a system your team can access without calling you. That means getting your logic out of your brain and into something they can actually use. CEO Brain was built for exactly this pattern. Not to replace you — to distribute you."
-  },
-  O: {
-    name: "The Overprover",
-    sub: "The scoreboard keeps moving because you keep moving it.",
-    truth: "You're not chasing growth. You're running from something. The number going up isn't the goal — it's the proof. Of what exactly is worth sitting with. But the business pays the price every time you prioritize momentum over foundation.",
-    detail: "<strong>What this looks like in real life:</strong> Revenue is up and you still feel behind. You say yes to growth before the infrastructure can hold it. Financial stress and operational chaos aren't signs something is wrong — they're signs you're growing too fast for the system you've built. The Money Mirage isn't lying to you. You're just not ready to hear it yet.",
-    primaryTraps: ["Money Mirage", "Marketing Sinkhole"],
-    fix: "<strong>The fix starts with the number that actually matters.</strong> Not revenue. Not topline. The number that tells you whether you can actually sustain what you're building — and whether it's sustaining you. The $100k Growth Plan exists to make the Money Mirage visible before it becomes a crisis. Then Forecast FastTrack keeps it that way."
-  },
-  P: {
-    name: "The Perfectionist",
-    sub: "Perfect is just control with better branding.",
-    truth: "Your standards aren't the problem. The fact that only you can meet them is. Somewhere the line between caring about quality and needing to be the one who defines it got blurry — and now nothing gets done without your fingerprints on it.",
-    detail: "<strong>What this looks like in real life:</strong> You tweak everything before it goes out. Launches get delayed because they're not ready — and they're never ready. Your team stops bringing you ideas because they already know what you'll do with them. The Marketing Sinkhole swallows budget not because your team is bad but because they're executing toward a moving target only you can see.",
-    primaryTraps: ["Marketing Sinkhole", "People Paradox"],
-    fix: "<strong>The fix is making your standard visible without requiring your presence.</strong> Commander's Intent, decision matrices, brand guidelines that actually exist outside your head — these are the tools that let your team execute to your standard without needing you to approve every sentence. That's what CPS builds."
-  },
-  L: {
-    name: "The Lone Wolf",
-    sub: "You built it alone. Now you're stuck alone inside it.",
-    truth: "You don't have a trust problem. You have a translation problem. You've never found a way to move what's in your head into something other people can actually use — so you stopped trying and started doing it yourself. The business got built. But so did the cage.",
-    detail: "<strong>What this looks like in real life:</strong> You're skeptical of your team not because they're bad but because they've never had access to how you actually think. Decisions feel faster when you just handle them. Feedback comes out blunter than intended. You hired people to take the load off and somehow you're carrying more. The People Paradox is fully operational.",
-    primaryTraps: ["People Paradox", "Time Trap"],
-    fix: "<strong>The fix is translation, not trust.</strong> You don't need to trust your team more — you need to give them what they'd need to think like you. That starts with getting your decision-making logic out of your head and into a system they can access without the conversation. That's the core function of CEO Brain."
-  },
-  PL: {
-    name: "The Pleaser",
-    sub: "You keep the peace. The business pays the bill.",
-    truth: "You're not conflict-averse. You're conflict-exhausted. Running a business is relentless and somewhere along the way avoiding friction became a survival mechanism. The problem is — unclear direction, unspoken feedback, and undiscussed problems don't disappear. They compound.",
-    detail: "<strong>What this looks like in real life:</strong> Feedback gets softened until it loses meaning. Team members leave surprised because you never told them the real score. Marketing messaging drifts because you don't want to override the team publicly. The People Paradox and the Marketing Sinkhole both feed off the same dynamic — nobody knows what you actually want because you've never said it out loud with the full weight behind it.",
-    primaryTraps: ["People Paradox", "Marketing Sinkhole"],
-    fix: "<strong>The fix is externalizing your standards before the conversation happens.</strong> When the expectation is documented — in writing, in a system, in a framework your team can reference — you're not overriding anyone in the moment. You're just holding them to something that already existed. That removes the interpersonal friction from the equation entirely."
-  }
-};
-
-const trapDescriptions = {
-  "Time Trap": "Your calendar is the business. You're doing the work instead of running it.",
-  "Money Mirage": "Revenue up. Take-home flat. Cash flow stress is the hidden tax.",
-  "People Paradox": "You paid for help. You're still doing the work.",
-  "Marketing Sinkhole": "More spend. Flat results. The message isn't landing."
-};
-
-let currentQ = 0;
-let scores = { I: 0, O: 0, P: 0, L: 0, PL: 0 };
-
-function startAssessment() {
-  showScreen('question');
-  renderQuestion();
-}
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-function renderQuestion() {
-  const q = questions[currentQ];
-  
-  document.getElementById('q-num').textContent = currentQ + 1;
-  document.getElementById('progress-fill').style.width = ((currentQ / questions.length) * 100) + '%';
-  
-  const sectionNum = String(q.section).padStart(2, '0');
-  document.getElementById('section-num').textContent = sectionNum;
-  document.getElementById('section-name').textContent = q.sectionName;
-  document.getElementById('section-desc').textContent = q.sectionDesc;
-  document.getElementById('q-text').innerHTML = q.text;
-  
-  const choicesEl = document.getElementById('choices');
-  choicesEl.innerHTML = '';
-  
-  q.choices.forEach((choice, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn fade-in';
-    btn.style.animationDelay = (i * 0.1) + 's';
-    btn.innerHTML = `
-      <div class="choice-label">Option ${String.fromCharCode(65 + i)}</div>
-      <div class="choice-text">${choice.text}</div>
-    `;
-    btn.onclick = () => selectChoice(choice.pattern, btn);
-    choicesEl.appendChild(btn);
-  });
-
-  document.getElementById('q-text').classList.remove('fade-in');
-  void document.getElementById('q-text').offsetWidth;
-  document.getElementById('q-text').classList.add('fade-in');
-}
-
-function selectChoice(pattern, btn) {
-  document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  
-  // Score the pattern(s)
-  if (pattern === 'PL') {
-    scores['P'] += 0.5;
-    scores['L'] += 0.5;
-  } else {
-    scores[pattern] = (scores[pattern] || 0) + 1;
-  }
-  
-  setTimeout(() => {
-    currentQ++;
-    if (currentQ < questions.length) {
-      renderQuestion();
-    } else {
-      showResults();
-    }
-  }, 350);
-}
-
-function showResults() {
-  showScreen('results');
-  
-  // Find dominant pattern
-  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  const dominant = sorted[0][0];
-  const secondary = sorted[1][0];
-  
-  const dominantPattern = patterns[dominant];
-  const secondaryPattern = patterns[secondary];
-  
-  document.getElementById('result-name').textContent = dominantPattern.name;
-  document.getElementById('result-sub').textContent = dominantPattern.sub;
-  document.getElementById('result-truth').textContent = dominantPattern.truth;
-  document.getElementById('result-detail').innerHTML = dominantPattern.detail;
-  document.getElementById('result-fix').innerHTML = dominantPattern.fix;
-  
-  // Blend badge
-  if (sorted[1][1] > 0) {
-    document.getElementById('blend-badge').textContent = `With traces of: ${secondaryPattern.name}`;
-  }
-  
-  // Trap map
-  const trapMap = document.getElementById('trap-map');
-  trapMap.innerHTML = '';
-  const allTraps = ["Time Trap", "Money Mirage", "People Paradox", "Marketing Sinkhole"];
-  
-  allTraps.forEach(trap => {
-    const isActive = dominantPattern.primaryTraps.includes(trap);
-    const div = document.createElement('div');
-    div.className = 'trap-item' + (isActive ? ' active' : '');
-    div.innerHTML = `
-      <div class="trap-item-label">${isActive ? '⚠ Primary cost' : 'Secondary'}</div>
-      <div class="trap-item-name">${trap}</div>
-      <div class="trap-item-cost">${trapDescriptions[trap]}</div>
-    `;
-    trapMap.appendChild(div);
-  });
-}
-
-function resetAssessment() {
-  currentQ = 0;
-  scores = { I: 0, O: 0, P: 0, L: 0, PL: 0 };
-  showScreen('intro');
-}
+  reveals.forEach(el => observer.observe(el));
 </script>
-
 </body>
 </html>
