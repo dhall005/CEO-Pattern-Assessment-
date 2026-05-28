@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forecast Carousel — L(E)arner Market Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0908;
+    --surface: #161410;
+    --surface2: #1e1b14;
+    --gold: #c9963a;
+    --gold-bright: #e8b84b;
+    --gold-dim: #7a5e22;
+    --white: #f2ece0;
+    --muted: #5c564a;
+    --muted2: #8a8070;
+    --red: #b84040;
+    --red-dim: #6b1f1f;
+    --amber: #c47830;
+    --green: #3a7a54;
+    --green-dim: #1a3d28;
+    --border: rgba(201,150,58,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1814;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 24px;
+    min-height: 100vh;
+  }
+
+  .page-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 8px;
+  }
+
+  .slide-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    align-self: flex-start;
+    max-width: 1080px;
+    width: 100%;
+  }
+
+  /* ── SLIDE BASE ── */
+  .slide {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .slide-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+  }
+
+  /* Grain */
+  .slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  /* Brand bar */
+  .brand-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    background: rgba(22,20,16,0.95);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 56px;
+    z-index: 10;
+  }
+
+  .brand-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+
+  .slide-counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .slide-counter span { color: var(--gold); }
+
+  /* Bottom bar */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(22,20,16,0.95);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 56px;
+    z-index: 10;
+  }
+
+  .bottom-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .bottom-url {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 1 — HOOK
+  ═══════════════════════════════════════ */
+  #slide1 .slide-bg {
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 30%, rgba(201,150,58,0.1) 0%, transparent 60%),
+      var(--bg);
+  }
+
+  #slide1 .content {
+    position: absolute;
+    inset: 72px 0 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 80px;
+    text-align: center;
+  }
+
+  #slide1 .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 40px;
+  }
+
+  #slide1 .main-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 112px;
+    line-height: 0.9;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  #slide1 .main-title .highlight {
+    color: var(--gold);
+    display: block;
+  }
+
+  #slide1 .divider {
+    width: 80px;
+    height: 3px;
+    background: var(--gold);
+    margin: 32px auto;
+  }
+
+  #slide1 .subtitle {
+    font-size: 26px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted2);
+    line-height: 1.5;
+    max-width: 700px;
+  }
+
+  #slide1 .subtitle strong {
+    color: var(--white);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* Decorative corner elements */
+  #slide1 .corner-tl,
+  #slide1 .corner-br {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    z-index: 5;
+  }
+
+  #slide1 .corner-tl {
+    top: 88px;
+    left: 40px;
+    border-top: 1px solid var(--gold-dim);
+    border-left: 1px solid var(--gold-dim);
+  }
+
+  #slide1 .corner-br {
+    bottom: 80px;
+    right: 40px;
+    border-bottom: 1px solid var(--gold-dim);
+    border-right: 1px solid var(--gold-dim);
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 2 — FOUR PROBLEMS
+  ═══════════════════════════════════════ */
+  #slide2 .content {
+    position: absolute;
+    inset: 72px 0 64px;
+    padding: 56px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #slide2 .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  #slide2 .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 48px;
+  }
+
+  #slide2 .section-title span { color: var(--gold); }
+
+  #slide2 .problems-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .problem-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .problem-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gold);
+  }
+
+  .problem-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: rgba(201,150,58,0.15);
+    line-height: 1;
+    position: absolute;
+    bottom: 12px;
+    right: 20px;
+  }
+
+  .problem-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--gold);
+    letter-spacing: 0.03em;
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+
+  .problem-desc {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--muted2);
+    line-height: 1.5;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 3 — UNDER FORECAST
+  ═══════════════════════════════════════ */
+  #slide3 .content {
+    position: absolute;
+    inset: 72px 0 64px;
+    padding: 56px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #slide3 .slide-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  #slide3 .status-badge {
+    background: rgba(58,122,84,0.15);
+    border: 1px solid rgba(58,122,84,0.4);
+    padding: 8px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+
+  #slide3 .slide-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 0.9;
+    color: var(--white);
+  }
+
+  #slide3 .slide-title span { color: var(--green); }
+
+  #slide3 .costs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .cost-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cost-header {
+    padding: 14px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .cost-header.hard {
+    background: rgba(58,122,84,0.2);
+    border: 1px solid rgba(58,122,84,0.4);
+    color: var(--green);
+  }
+
+  .cost-header.soft {
+    background: rgba(196,120,48,0.15);
+    border: 1px solid rgba(196,120,48,0.3);
+    color: var(--amber);
+  }
+
+  .cost-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .cost-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.4;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .cost-item::before {
+    content: '→';
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--gold-dim);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 4 — OVER FORECAST
+  ═══════════════════════════════════════ */
+  #slide4 .content {
+    position: absolute;
+    inset: 72px 0 64px;
+    padding: 56px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #slide4 .slide-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  #slide4 .status-badge {
+    background: rgba(184,64,64,0.15);
+    border: 1px solid rgba(184,64,64,0.4);
+    padding: 8px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  #slide4 .slide-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 0.9;
+    color: var(--white);
+  }
+
+  #slide4 .slide-title span { color: var(--red); }
+
+  #slide4 .costs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    flex: 1;
+  }
+
+  #slide4 .cost-header.hard {
+    background: rgba(184,64,64,0.15);
+    border: 1px solid rgba(184,64,64,0.3);
+    color: var(--red);
+  }
+
+  #slide4 .cost-header.soft {
+    background: rgba(196,120,48,0.15);
+    border: 1px solid rgba(196,120,48,0.3);
+    color: var(--amber);
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 5 — CTA
+  ═══════════════════════════════════════ */
+  #slide5 .slide-bg {
+    background:
+      radial-gradient(ellipse 80% 70% at 50% 60%, rgba(201,150,58,0.08) 0%, transparent 65%),
+      var(--bg);
+  }
+
+  #slide5 .content {
+    position: absolute;
+    inset: 72px 0 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 80px;
+    text-align: center;
+  }
+
+  #slide5 .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+
+  #slide5 .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 96px;
+    line-height: 0.9;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  #slide5 .cta-title span { color: var(--gold); display: block; }
+
+  #slide5 .divider {
+    width: 80px;
+    height: 3px;
+    background: var(--gold);
+    margin: 32px auto;
+  }
+
+  #slide5 .cta-desc {
+    font-size: 24px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted2);
+    line-height: 1.6;
+    max-width: 720px;
+    margin-bottom: 48px;
+  }
+
+  #slide5 .cta-desc strong {
+    color: var(--white);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  #slide5 .cta-box {
+    background: var(--gold);
+    padding: 24px 64px;
+  }
+
+  #slide5 .cta-box-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.1em;
+    color: var(--bg);
+  }
+
+  #slide5 .cta-url {
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+
+  /* Three tips strip */
+  #slide5 .tips-strip {
+    display: flex;
+    gap: 0;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+
+  #slide5 .tip {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    text-align: left;
+    position: relative;
+  }
+
+  #slide5 .tip:not(:last-child) {
+    border-right: none;
+  }
+
+  #slide5 .tip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  #slide5 .tip-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  #slide5 .tip-text {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted2);
+    line-height: 1.4;
+  }
+
+  #slide5 .tip-text strong {
+    color: var(--white);
+    font-weight: 500;
+    display: block;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  /* Print/export hint */
+  .export-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">Forecast Carousel — Instagram 1080×1080</div>
+
+<!-- ═══ SLIDE 1 — HOOK ═══ -->
+<div class="slide-label">Slide 1 of 5 — Hook</div>
+<div class="slide" id="slide1">
+  <div class="slide-bg"></div>
+  <div class="brand-bar">
+    <span class="brand-name">L(E)arner MG</span>
+    <span class="slide-counter"><span>01</span> / 05</span>
+  </div>
+
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+
+  <div class="content">
+    <div class="eyebrow">Forecast FastTrack — Retail Intelligence</div>
+    <div class="main-title">
+      Missing Your
+      <span class="highlight">Forecast</span>
+      Is Costing You.
+    </div>
+    <div class="divider"></div>
+    <div class="subtitle">
+      Whether you're <strong>under or over</strong> — a bad forecast doesn't just affect the numbers. It affects your team, your cash, and your ability to make the next move.
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <span class="bottom-tag">Swipe to see the real cost →</span>
+    <span class="bottom-url">learnermg.com</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 2 — FOUR PROBLEMS ═══ -->
+<div class="slide-label">Slide 2 of 5 — The Four Problems</div>
+<div class="slide" id="slide2">
+  <div class="slide-bg"></div>
+  <div class="brand-bar">
+    <span class="brand-name">L(E)arner MG</span>
+    <span class="slide-counter"><span>02</span> / 05</span>
+  </div>
+
+  <div class="content">
+    <div class="section-eyebrow">Why Most Retail Forecasts Fail</div>
+    <div class="section-title">Four Reasons Your<br>Numbers <span>Lie To You</span></div>
+
+    <div class="problems-grid">
+      <div class="problem-card">
+        <div class="problem-num">01</div>
+        <div class="problem-title">Dirty Data</div>
+        <div class="problem-desc">COVID and inflation left abnormal highs and lows still poisoning your baseline numbers today.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">02</div>
+        <div class="problem-title">Gut Feel<br>Decisions</div>
+        <div class="problem-desc">Orders placed on instinct instead of pattern. The feel-good reorder that becomes dead inventory.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">03</div>
+        <div class="problem-title">No Leading<br>Indicators</div>
+        <div class="problem-desc">Reacting to what already happened instead of predicting what's coming. Always one step behind.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">04</div>
+        <div class="problem-title">Siloed<br>Data</div>
+        <div class="problem-desc">POS, inventory, and buying decisions living in different systems with no unified picture.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <span class="bottom-tag">The cost of getting it wrong →</span>
+    <span class="bottom-url">learnermg.com</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 3 — UNDER FORECAST ═══ -->
+<div class="slide-label">Slide 3 of 5 — Under the Forecast</div>
+<div class="slide" id="slide3">
+  <div class="slide-bg"></div>
+  <div class="brand-bar">
+    <span class="brand-name">L(E)arner MG</span>
+    <span class="slide-counter"><span>03</span> / 05</span>
+  </div>
+
+  <div class="content">
+    <div class="slide-header">
+      <div class="status-badge">Scenario</div>
+      <div class="slide-title">When You're<br><span>Under</span> The Forecast</div>
+    </div>
+
+    <div class="costs-grid">
+      <div class="cost-column">
+        <div class="cost-header hard">Hard Cost</div>
+        <div class="cost-items">
+          <div class="cost-item">Stockouts on your best sellers — customers walk and don't come back</div>
+          <div class="cost-item">Emergency reorders at premium prices destroy your margin</div>
+          <div class="cost-item">Cash locked in the wrong inventory while winners sit empty</div>
+          <div class="cost-item">Lost revenue you can never recover — the sale is gone forever</div>
+        </div>
+      </div>
+      <div class="cost-column">
+        <div class="cost-header soft">Soft Cost</div>
+        <div class="cost-items">
+          <div class="cost-item">Staff fielding angry customers drains morale and productivity</div>
+          <div class="cost-item">Your team loses confidence in the buying process</div>
+          <div class="cost-item">Brand reputation takes a hit every time a regular can't get what they came for</div>
+          <div class="cost-item">You spend your time firefighting instead of building</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <span class="bottom-tag">But over-forecasting isn't safer →</span>
+    <span class="bottom-url">learnermg.com</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 4 — OVER FORECAST ═══ -->
+<div class="slide-label">Slide 4 of 5 — Over the Forecast</div>
+<div class="slide" id="slide4">
+  <div class="slide-bg"></div>
+  <div class="brand-bar">
+    <span class="brand-name">L(E)arner MG</span>
+    <span class="slide-counter"><span>04</span> / 05</span>
+  </div>
+
+  <div class="content">
+    <div class="slide-header">
+      <div class="status-badge">Scenario</div>
+      <div class="slide-title">When You're<br><span>Over</span> The Forecast</div>
+    </div>
+
+    <div class="costs-grid">
+      <div class="cost-column">
+        <div class="cost-header hard">Hard Cost</div>
+        <div class="cost-items">
+          <div class="cost-item">Dead inventory ties up cash you need to run the business</div>
+          <div class="cost-item">Markdowns and clearance sales train customers to wait for discounts</div>
+          <div class="cost-item">Storage costs compound while product sits and depreciates</div>
+          <div class="cost-item">Cash flow crunch limits your ability to reorder winners</div>
+        </div>
+      </div>
+      <div class="cost-column">
+        <div class="cost-header soft">Soft Cost</div>
+        <div class="cost-items">
+          <div class="cost-item">Bloated inventory makes your store feel stale and hard to navigate</div>
+          <div class="cost-item">Buying confidence drops — overcorrection leads to under-ordering next cycle</div>
+          <div class="cost-item">The cycle of overstock and stockout becomes your default operating mode</div>
+          <div class="cost-item">You're managing inventory instead of growing the business</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <span class="bottom-tag">There's a better way →</span>
+    <span class="bottom-url">learnermg.com</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 5 — CTA ═══ -->
+<div class="slide-label">Slide 5 of 5 — CTA</div>
+<div class="slide" id="slide5">
+  <div class="slide-bg"></div>
+  <div class="brand-bar">
+    <span class="brand-name">L(E)arner MG</span>
+    <span class="slide-counter"><span>05</span> / 05</span>
+  </div>
+
+  <div class="content">
+    <div class="eyebrow">The Fix — Forecast FastTrack</div>
+
+    <div class="tips-strip">
+      <div class="tip">
+        <div class="tip-num">01</div>
+        <div class="tip-text">
+          <strong>Clean the data</strong>
+          Remove the COVID and inflation outliers still skewing your baseline
+        </div>
+      </div>
+      <div class="tip">
+        <div class="tip-num">02</div>
+        <div class="tip-text">
+          <strong>Stabilize the signal</strong>
+          Make your data predictable before you try to predict it
+        </div>
+      </div>
+      <div class="tip">
+        <div class="tip-num">03</div>
+        <div class="tip-text">
+          <strong>Add leading indicators</strong>
+          Know what's coming before it arrives — not after it hits
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-title">
+      Stop Guessing.
+      <span>Start Forecasting.</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="cta-box">
+      <div class="cta-box-text">Join the 30 Day Forecast Challenge — Free</div>
+    </div>
+
+    <div class="cta-url">fft.learnermg.com</div>
+  </div>
+
+  <div class="bottom-bar">
+    <span class="bottom-tag">L(E)arner Market Group</span>
+    <span class="bottom-url">fft.learnermg.com</span>
+  </div>
+</div>
+
+<div class="export-hint">To save as images: open in browser → right-click each slide → screenshot or use browser print to PDF</div>
+
+</body>
+</html>
