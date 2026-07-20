@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEO Brain — Founding Partner — L(E)arner Market Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0908;
+    --bg2: #111009;
+    --surface: #161410;
+    --surface2: #1e1b14;
+    --gold: #c9963a;
+    --gold-bright: #e8b84b;
+    --gold-dim: #7a5e22;
+    --gold-glow: rgba(201,150,58,0.1);
+    --white: #f2ece0;
+    --muted: #5c564a;
+    --muted2: #8a8070;
+    --red: #b84040;
+    --green: #3a7a54;
+    --border: rgba(201,150,58,0.12);
+    --border-bright: rgba(201,150,58,0.35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 64px;
+    background: rgba(10,9,8,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 100;
+  }
+
+  .nav-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-spots {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .spots-badge {
+    background: rgba(201,150,58,0.12);
+    border: 1px solid var(--gold-dim);
+    padding: 4px 12px;
+    color: var(--gold);
+    font-size: 10px;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 20%, rgba(201,150,58,0.09) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 80% 70%, rgba(201,150,58,0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 13vw, 140px);
+    line-height: 0.88;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+  }
+
+  .hero-title .l1 { color: var(--white); display: block; }
+  .hero-title .l2 { color: var(--white); display: block; }
+  .hero-title .l3 { color: var(--gold); display: block; }
+
+  .hero-divider {
+    width: 64px;
+    height: 2px;
+    background: var(--gold);
+    margin: 0 auto 32px;
+  }
+
+  .hero-sub {
+    font-size: clamp(17px, 2.5vw, 20px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted2);
+    max-width: 540px;
+    line-height: 1.7;
+  }
+
+  /* SCROLL HINT */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .scroll-hint-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(180deg, var(--gold-dim), transparent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* PAGE */
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+
+  /* OPENING SECTION */
+  .opening {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .opening-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 6vw, 56px);
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 28px;
+  }
+
+  .opening-title span { color: var(--gold); }
+
+  .body-text {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--muted2);
+    margin-bottom: 20px;
+  }
+
+  .body-text strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  /* DEAL SECTION */
+  .deal-section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .deal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 6vw, 52px);
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 40px;
+  }
+
+  .deal-title span { color: var(--gold); }
+
+  /* Deal blocks */
+  .deal-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .deal-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 32px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .deal-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: var(--gold);
+  }
+
+  .deal-block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .deal-block-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--white);
+    letter-spacing: 0.03em;
+    margin-bottom: 12px;
+  }
+
+  .deal-block-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .deal-block-price-note {
+    font-size: 14px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted2);
+  }
+
+  .deal-block-price-note strong {
+    color: var(--white);
+    font-style: normal;
+  }
+
+  .deal-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .deal-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  .deal-item-arrow {
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .deal-item-sub {
+    font-size: 13px;
+    color: var(--muted2);
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  /* Cap block */
+  .cap-block {
+    background: rgba(201,150,58,0.06);
+    border: 1px solid var(--border-bright);
+    padding: 24px 36px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 2px;
+  }
+
+  .cap-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--gold);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .cap-text {}
+
+  .cap-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+  }
+
+  .cap-desc {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted2);
+    line-height: 1.6;
+  }
+
+  .cap-desc strong { color: var(--white); font-weight: 500; }
+
+  /* GUARANTEE SECTION */
+  .guarantee-section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .guarantee-box {
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .guarantee-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .guarantee-box::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(201,150,58,0.08);
+    pointer-events: none;
+  }
+
+  .guarantee-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .guarantee-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px;
+    color: var(--white);
+    line-height: 0.95;
+    margin-bottom: 24px;
+    letter-spacing: 0.02em;
+  }
+
+  .guarantee-body {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--muted2);
+    line-height: 1.85;
+    margin-bottom: 16px;
+  }
+
+  .guarantee-body strong { color: var(--white); font-weight: 500; }
+
+  .guarantee-final {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--gold-bright);
+    font-style: italic;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* QUESTION SECTION */
+  .question-section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .question-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 24px;
+  }
+
+  .question-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    line-height: 1.05;
+    color: var(--white);
+    max-width: 580px;
+    margin: 0 auto 24px;
+  }
+
+  .question-text span { color: var(--gold); }
+
+  .question-answer {
+    font-size: 17px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted2);
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 60px 0 40px;
+    text-align: center;
+  }
+
+  .cta-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 20px;
+  }
+
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 7vw, 64px);
+    line-height: 0.92;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .cta-sub {
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted2);
+    max-width: 440px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .btn-book {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 22px 64px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-book:hover {
+    background: var(--gold-bright);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(201,150,58,0.3);
+  }
+
+  .cta-note {
+    margin-top: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .offer-doc-link {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted2);
+  }
+
+  .offer-doc-link a {
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold-dim);
+    transition: color 0.2s ease;
+  }
+
+  .offer-doc-link a:hover { color: var(--gold-bright); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .footer-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .footer-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .page { padding: 0 20px 60px; }
+    .deal-block { padding: 24px; }
+    .guarantee-box { padding: 28px; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="trap_tax_audit.html" class="nav-brand">L(E)arner Market Group</a>
+  <div class="nav-spots">
+    Founding Partner Spots Remaining
+    <span class="spots-badge">6 of 6</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow">CEO Brain — Founding Partner Offer</div>
+  <h1 class="hero-title">
+    <span class="l1">You Responded.</span>
+    <span class="l2">Here's</span>
+    <span class="l3">The Deal.</span>
+  </h1>
+  <div class="hero-divider"></div>
+  <p class="hero-sub">No pitch. No fluff. Just what this is, what you get, and what it costs.</p>
+  <div class="scroll-hint">
+    <span class="scroll-hint-text">Read the deal</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- OPENING -->
+  <div class="opening reveal">
+    <div class="section-label">What CEO Brain Is</div>
+    <h2 class="opening-title">
+      Your Team Stops Coming<br>
+      To You For Answers<br>
+      <span>You've Already Given.</span>
+    </h2>
+    <p class="body-text">CEO Brain externalizes your decision-making logic into a system your team uses instead of coming to you. Every question your team asks that you've already answered a hundred times gets handled without you. <strong>You stop being the bottleneck in your own business.</strong></p>
+    <p class="body-text">Right now I'm looking for 6 founding partners to build real case studies before the price goes to $5,000. If you're reading this, you responded to one of those conversations. Here's exactly what the deal looks like.</p>
+  </div>
+
+  <!-- DEAL -->
+  <div class="deal-section reveal">
+    <div class="section-label">The Founding Partner Deal</div>
+    <h2 class="deal-title">Simple Terms.<br><span>No Surprises.</span></h2>
+
+    <div class="deal-blocks">
+
+      <!-- What you pay -->
+      <div class="deal-block">
+        <div class="deal-block-label">What You Pay</div>
+        <div class="deal-block-price">$2,500</div>
+        <div class="deal-block-price-note">Scheduled 14 days from the day we start. <strong>Only charged if it delivers value.</strong></div>
+      </div>
+
+      <!-- What you get -->
+      <div class="deal-block">
+        <div class="deal-block-label">What You Get</div>
+        <div class="deal-items">
+          <div class="deal-item">
+            <span class="deal-item-arrow">01</span>
+            <div>
+              <div>The full Trap Tax Audit before we start</div>
+              <div class="deal-item-sub">So we know exactly where your CEO Trap is operating and what it's costing you before we touch anything.</div>
+            </div>
+          </div>
+          <div class="deal-item">
+            <span class="deal-item-arrow">02</span>
+            <div>
+              <div>CEO Brain built and installed for your business</div>
+              <div class="deal-item-sub">Your decision-making logic externalized into a system your team actually uses.</div>
+            </div>
+          </div>
+          <div class="deal-item">
+            <span class="deal-item-arrow">03</span>
+            <div>
+              <div>The Decision Gap Audit after</div>
+              <div class="deal-item-sub">So we can measure whether the gap actually closed. Not on faith — on data.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- What I get -->
+      <div class="deal-block">
+        <div class="deal-block-label">What I Get</div>
+        <div class="deal-items">
+          <div class="deal-item">
+            <span class="deal-item-arrow">→</span>
+            <div>Your honest feedback throughout the engagement.</div>
+          </div>
+          <div class="deal-item">
+            <span class="deal-item-arrow">→</span>
+            <div>A case study if the results are there.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- The cap -->
+      <div class="cap-block">
+        <div class="cap-num">6</div>
+        <div class="cap-text">
+          <div class="cap-label">The Cap</div>
+          <div class="cap-desc">6 founding partners. After that <strong>the price goes to $5,000 and this deal closes permanently.</strong> This page will update as spots fill.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- GUARANTEE -->
+  <div class="guarantee-section reveal">
+    <div class="section-label">The Guarantee</div>
+    <div class="guarantee-box">
+      <div class="guarantee-label">No Pay Guarantee</div>
+      <div class="guarantee-title">You Only Pay<br>If It Works.</div>
+      <p class="guarantee-body">Before we get off the first call I schedule your payment for <strong>14 days from the day we begin.</strong></p>
+      <p class="guarantee-body">If CEO Brain hasn't delivered value by day 14 you ask to cancel. No process. No questions designed to talk you out of it. You cancel and you pay nothing.</p>
+      <p class="guarantee-body">The payment is scheduled by default. You have 14 days to experience the system and decide. If it works — which it will — the payment processes. If it doesn't — which would surprise me — you cancel and owe nothing.</p>
+      <div class="guarantee-final">You're not paying for a promise. You're paying for a result.</div>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div class="question-section reveal">
+    <div class="question-eyebrow">One Question Before We Talk</div>
+    <div class="question-text">How many times did your team come to you today for something that <span>shouldn't have required you?</span></div>
+    <div class="question-answer">If the answer is more than zero — we should talk.</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section reveal">
+    <div class="cta-eyebrow">Ready? Here's The Next Step.</div>
+    <div class="cta-title">Book A<br>30 Minute Call.</div>
+    <p class="cta-sub">No pressure. No hard close. Just a conversation to see if this is the right fit for where you are right now.</p>
+    <a href="#" class="btn-book">BOOK YOUR CALL</a>
+    <div class="cta-note">Free · 30 Minutes · No Obligation</div>
+    <div class="offer-doc-link">
+      Not ready to book yet? <a href="LMG_Founding_Partner_Offer.md">Read the full offer breakdown here.</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">L(E)arner Market Group</div>
+  <div class="footer-tag">CEO Brain — Founding Partner</div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
